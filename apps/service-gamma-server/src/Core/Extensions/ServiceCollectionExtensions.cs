@@ -10,5 +10,6 @@ public static class ServiceCollectionExtensions
     public static void RegisterServices(this IServiceCollection services)
     {
         services.AddScoped<IFffsService, FffsService>();
+        services.AddScoped<IHellosService, HellosService>();
     }
 }
