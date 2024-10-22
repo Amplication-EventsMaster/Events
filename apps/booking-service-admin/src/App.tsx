@@ -5,6 +5,10 @@ import { theme } from "./theme/theme";
 import Login from "./Login";
 import "./App.scss";
 import Dashboard from "./pages/Dashboard";
+import { SdfsfList } from "./sdfsf/SdfsfList";
+import { SdfsfCreate } from "./sdfsf/SdfsfCreate";
+import { SdfsfEdit } from "./sdfsf/SdfsfEdit";
+import { SdfsfShow } from "./sdfsf/SdfsfShow";
 import { jwtAuthProvider } from "./auth-provider/ra-auth-jwt";
 
 const App = (): React.ReactElement => {
@@ -17,7 +21,15 @@ const App = (): React.ReactElement => {
         theme={theme}
         dashboard={Dashboard}
         loginPage={Login}
-      ></Admin>
+      >
+        <Resource
+          name="Sdfsf"
+          list={SdfsfList}
+          edit={SdfsfEdit}
+          create={SdfsfCreate}
+          show={SdfsfShow}
+        />
+      </Admin>
     </div>
   );
 };
