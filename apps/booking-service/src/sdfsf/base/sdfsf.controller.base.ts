@@ -31,6 +31,7 @@ export class SdfsfControllerBase {
     return await this.service.createSdfsf({
       data: data,
       select: {
+        a: true,
         createdAt: true,
         id: true,
         updatedAt: true,
@@ -46,6 +47,7 @@ export class SdfsfControllerBase {
     return this.service.sdfsfs({
       ...args,
       select: {
+        a: true,
         createdAt: true,
         id: true,
         updatedAt: true,
@@ -62,6 +64,7 @@ export class SdfsfControllerBase {
     const result = await this.service.sdfsf({
       where: params,
       select: {
+        a: true,
         createdAt: true,
         id: true,
         updatedAt: true,
@@ -87,6 +90,7 @@ export class SdfsfControllerBase {
         where: params,
         data: data,
         select: {
+          a: true,
           createdAt: true,
           id: true,
           updatedAt: true,
@@ -112,6 +116,7 @@ export class SdfsfControllerBase {
       return await this.service.deleteSdfsf({
         where: params,
         select: {
+          a: true,
           createdAt: true,
           id: true,
           updatedAt: true,

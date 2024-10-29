@@ -17,6 +17,8 @@ import { Sdfsf } from "./Sdfsf";
 import { SdfsfCountArgs } from "./SdfsfCountArgs";
 import { SdfsfFindManyArgs } from "./SdfsfFindManyArgs";
 import { SdfsfFindUniqueArgs } from "./SdfsfFindUniqueArgs";
+import { CreateSdfsfArgs } from "./CreateSdfsfArgs";
+import { UpdateSdfsfArgs } from "./UpdateSdfsfArgs";
 import { DeleteSdfsfArgs } from "./DeleteSdfsfArgs";
 import { SdfsfService } from "../sdfsf.service";
 @graphql.Resolver(() => Sdfsf)
@@ -46,6 +48,33 @@ export class SdfsfResolverBase {
       return null;
     }
     return result;
+  }
+
+  @graphql.Mutation(() => Sdfsf)
+  async createSdfsf(@graphql.Args() args: CreateSdfsfArgs): Promise<Sdfsf> {
+    return await this.service.createSdfsf({
+      ...args,
+      data: args.data,
+    });
+  }
+
+  @graphql.Mutation(() => Sdfsf)
+  async updateSdfsf(
+    @graphql.Args() args: UpdateSdfsfArgs
+  ): Promise<Sdfsf | null> {
+    try {
+      return await this.service.updateSdfsf({
+        ...args,
+        data: args.data,
+      });
+    } catch (error) {
+      if (isRecordNotFoundError(error)) {
+        throw new GraphQLError(
+          `No resource was found for ${JSON.stringify(args.where)}`
+        );
+      }
+      throw error;
+    }
   }
 
   @graphql.Mutation(() => Sdfsf)

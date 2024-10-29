@@ -1,1 +1,3 @@
-export type SdfsfUpdateInput = {};
+export type SdfsfUpdateInput = {
+  a?: string | null;
+};

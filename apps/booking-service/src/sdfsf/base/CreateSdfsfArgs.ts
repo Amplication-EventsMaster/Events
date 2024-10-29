@@ -9,23 +9,22 @@ https://docs.amplication.com/how-to/custom-code
 
 ------------------------------------------------------------------------------
   */
-import { InputType, Field } from "@nestjs/graphql";
+import { ArgsType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, MaxLength, IsOptional } from "class-validator";
+import { SdfsfCreateInput } from "./SdfsfCreateInput";
+import { ValidateNested } from "class-validator";
+import { Type } from "class-transformer";
 
-@InputType()
-class SdfsfCreateInput {
+@ArgsType()
+class CreateSdfsfArgs {
   @ApiProperty({
-    required: false,
-    type: String,
+    required: true,
+    type: () => SdfsfCreateInput,
   })
-  @IsString()
-  @MaxLength(1000)
-  @IsOptional()
-  @Field(() => String, {
-    nullable: true,
-  })
-  a?: string | null;
+  @ValidateNested()
+  @Type(() => SdfsfCreateInput)
+  @Field(() => SdfsfCreateInput, { nullable: false })
+  data!: SdfsfCreateInput;
 }
 
-export { SdfsfCreateInput as SdfsfCreateInput };
+export { CreateSdfsfArgs as CreateSdfsfArgs };
