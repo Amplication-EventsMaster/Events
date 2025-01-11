@@ -22,11 +22,10 @@ import { CustomerService } from "../customer.service";
 import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { CustomerCreateInput } from "./CustomerCreateInput";
-import { CustomerWhereInput } from "./CustomerWhereInput";
-import { CustomerWhereUniqueInput } from "./CustomerWhereUniqueInput";
-import { CustomerFindManyArgs } from "./CustomerFindManyArgs";
-import { CustomerUpdateInput } from "./CustomerUpdateInput";
 import { Customer } from "./Customer";
+import { CustomerFindManyArgs } from "./CustomerFindManyArgs";
+import { CustomerWhereUniqueInput } from "./CustomerWhereUniqueInput";
+import { CustomerUpdateInput } from "./CustomerUpdateInput";
 import { EventFindManyArgs } from "../../event/base/EventFindManyArgs";
 import { Event } from "../../event/base/Event";
 import { EventWhereUniqueInput } from "../../event/base/EventWhereUniqueInput";
@@ -49,8 +48,10 @@ export class CustomerControllerBase {
   @swagger.ApiForbiddenResponse({
     type: errors.ForbiddenException,
   })
-  async create(@common.Body() data: CustomerCreateInput): Promise<Customer> {
-    return await this.service.create({
+  async createCustomer(
+    @common.Body() data: CustomerCreateInput
+  ): Promise<Customer> {
+    return await this.service.createCustomer({
       data: data,
       select: {
         createdAt: true,
@@ -75,9 +76,9 @@ export class CustomerControllerBase {
   @swagger.ApiForbiddenResponse({
     type: errors.ForbiddenException,
   })
-  async findMany(@common.Req() request: Request): Promise<Customer[]> {
+  async customers(@common.Req() request: Request): Promise<Customer[]> {
     const args = plainToClass(CustomerFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.customers({
       ...args,
       select: {
         createdAt: true,
@@ -102,10 +103,10 @@ export class CustomerControllerBase {
   @swagger.ApiForbiddenResponse({
     type: errors.ForbiddenException,
   })
-  async findOne(
+  async customer(
     @common.Param() params: CustomerWhereUniqueInput
   ): Promise<Customer | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.customer({
       where: params,
       select: {
         createdAt: true,
@@ -136,12 +137,12 @@ export class CustomerControllerBase {
   @swagger.ApiForbiddenResponse({
     type: errors.ForbiddenException,
   })
-  async update(
+  async updateCustomer(
     @common.Param() params: CustomerWhereUniqueInput,
     @common.Body() data: CustomerUpdateInput
   ): Promise<Customer | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateCustomer({
         where: params,
         data: data,
         select: {
@@ -174,11 +175,11 @@ export class CustomerControllerBase {
   @swagger.ApiForbiddenResponse({
     type: errors.ForbiddenException,
   })
-  async delete(
+  async deleteCustomer(
     @common.Param() params: CustomerWhereUniqueInput
   ): Promise<Customer | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteCustomer({
         where: params,
         select: {
           createdAt: true,
@@ -207,7 +208,7 @@ export class CustomerControllerBase {
     action: "read",
     possession: "any",
   })
-  async findManyEvents(
+  async findEvents(
     @common.Req() request: Request,
     @common.Param() params: CustomerWhereUniqueInput
   ): Promise<Event[]> {
@@ -252,7 +253,7 @@ export class CustomerControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateCustomer({
       where: params,
       data,
       select: { id: true },
@@ -274,7 +275,7 @@ export class CustomerControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateCustomer({
       where: params,
       data,
       select: { id: true },
@@ -296,7 +297,7 @@ export class CustomerControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateCustomer({
       where: params,
       data,
       select: { id: true },
