@@ -7,9 +7,24 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Sdfsf {
-  a         String?
-  createdAt DateTime @default(now())
-  id        String   @id @default(cuid())
-  updatedAt DateTime @updatedAt
+model Booking {
+  createdAt DateTime  @default(now())
+  customer  String?
+  date      DateTime?
+  flight    String?
+  id        String    @id @default(cuid())
+  payments  Payment[]
+  status    String?
+  updatedAt DateTime  @updatedAt
+}
+
+model Payment {
+  amount    Float?
+  booking   Booking?  @relation(fields: [bookingId], references: [id])
+  bookingId String?
+  createdAt DateTime  @default(now())
+  date      DateTime?
+  id        String    @id @default(cuid())
+  method    String?
+  updatedAt DateTime  @updatedAt
 }
