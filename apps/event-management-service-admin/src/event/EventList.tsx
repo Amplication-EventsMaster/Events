@@ -12,14 +12,8 @@ import { CUSTOMER_TITLE_FIELD } from "../customer/CustomerTitle";
 
 export const EventList = (props: ListProps): React.ReactElement => {
   return (
-    <List
-      {...props}
-      bulkActionButtons={false}
-      title={"Events"}
-      perPage={50}
-      pagination={<Pagination />}
-    >
-      <Datagrid rowClick="show">
+    <List {...props} title={"Events"} perPage={50} pagination={<Pagination />}>
+      <Datagrid rowClick="show" bulkActionButtons={false}>
         <DateField source="createdAt" label="Created At" />
         <ReferenceField
           label="Customer"
@@ -31,7 +25,7 @@ export const EventList = (props: ListProps): React.ReactElement => {
         <TextField label="Date" source="date" />
         <TextField label="ID" source="id" />
         <TextField label="Name" source="name" />
-        <DateField source="updatedAt" label="Updated At" />
+        <DateField source="updatedAt" label="Updated At" />{" "}
       </Datagrid>
     </List>
   );
