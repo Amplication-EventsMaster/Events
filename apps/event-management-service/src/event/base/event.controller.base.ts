@@ -22,11 +22,10 @@ import { EventService } from "../event.service";
 import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { EventCreateInput } from "./EventCreateInput";
-import { EventWhereInput } from "./EventWhereInput";
-import { EventWhereUniqueInput } from "./EventWhereUniqueInput";
-import { EventFindManyArgs } from "./EventFindManyArgs";
-import { EventUpdateInput } from "./EventUpdateInput";
 import { Event } from "./Event";
+import { EventFindManyArgs } from "./EventFindManyArgs";
+import { EventWhereUniqueInput } from "./EventWhereUniqueInput";
+import { EventUpdateInput } from "./EventUpdateInput";
 
 @swagger.ApiBearerAuth()
 @common.UseGuards(defaultAuthGuard.DefaultAuthGuard, nestAccessControl.ACGuard)
@@ -46,8 +45,8 @@ export class EventControllerBase {
   @swagger.ApiForbiddenResponse({
     type: errors.ForbiddenException,
   })
-  async create(@common.Body() data: EventCreateInput): Promise<Event> {
-    return await this.service.create({
+  async createEvent(@common.Body() data: EventCreateInput): Promise<Event> {
+    return await this.service.createEvent({
       data: {
         ...data,
 
@@ -86,9 +85,9 @@ export class EventControllerBase {
   @swagger.ApiForbiddenResponse({
     type: errors.ForbiddenException,
   })
-  async findMany(@common.Req() request: Request): Promise<Event[]> {
+  async events(@common.Req() request: Request): Promise<Event[]> {
     const args = plainToClass(EventFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.events({
       ...args,
       select: {
         createdAt: true,
@@ -119,10 +118,10 @@ export class EventControllerBase {
   @swagger.ApiForbiddenResponse({
     type: errors.ForbiddenException,
   })
-  async findOne(
+  async event(
     @common.Param() params: EventWhereUniqueInput
   ): Promise<Event | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.event({
       where: params,
       select: {
         createdAt: true,
@@ -159,12 +158,12 @@ export class EventControllerBase {
   @swagger.ApiForbiddenResponse({
     type: errors.ForbiddenException,
   })
-  async update(
+  async updateEvent(
     @common.Param() params: EventWhereUniqueInput,
     @common.Body() data: EventUpdateInput
   ): Promise<Event | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateEvent({
         where: params,
         data: {
           ...data,
@@ -211,11 +210,11 @@ export class EventControllerBase {
   @swagger.ApiForbiddenResponse({
     type: errors.ForbiddenException,
   })
-  async delete(
+  async deleteEvent(
     @common.Param() params: EventWhereUniqueInput
   ): Promise<Event | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteEvent({
         where: params,
         select: {
           createdAt: true,
