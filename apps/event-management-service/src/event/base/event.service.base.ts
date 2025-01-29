@@ -10,44 +10,36 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
-import { Prisma, Event, Customer } from "@prisma/client";
+import {
+  Prisma,
+  Event as PrismaEvent,
+  Customer as PrismaCustomer,
+} from "@prisma/client";
 
 export class EventServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
 
-  async count<T extends Prisma.EventCountArgs>(
-    args: Prisma.SelectSubset<T, Prisma.EventCountArgs>
-  ): Promise<number> {
+  async count(args: Omit<Prisma.EventCountArgs, "select">): Promise<number> {
     return this.prisma.event.count(args);
   }
 
-  async findMany<T extends Prisma.EventFindManyArgs>(
-    args: Prisma.SelectSubset<T, Prisma.EventFindManyArgs>
-  ): Promise<Event[]> {
+  async events(args: Prisma.EventFindManyArgs): Promise<PrismaEvent[]> {
     return this.prisma.event.findMany(args);
   }
-  async findOne<T extends Prisma.EventFindUniqueArgs>(
-    args: Prisma.SelectSubset<T, Prisma.EventFindUniqueArgs>
-  ): Promise<Event | null> {
+  async event(args: Prisma.EventFindUniqueArgs): Promise<PrismaEvent | null> {
     return this.prisma.event.findUnique(args);
   }
-  async create<T extends Prisma.EventCreateArgs>(
-    args: Prisma.SelectSubset<T, Prisma.EventCreateArgs>
-  ): Promise<Event> {
-    return this.prisma.event.create<T>(args);
+  async createEvent(args: Prisma.EventCreateArgs): Promise<PrismaEvent> {
+    return this.prisma.event.create(args);
   }
-  async update<T extends Prisma.EventUpdateArgs>(
-    args: Prisma.SelectSubset<T, Prisma.EventUpdateArgs>
-  ): Promise<Event> {
-    return this.prisma.event.update<T>(args);
+  async updateEvent(args: Prisma.EventUpdateArgs): Promise<PrismaEvent> {
+    return this.prisma.event.update(args);
   }
-  async delete<T extends Prisma.EventDeleteArgs>(
-    args: Prisma.SelectSubset<T, Prisma.EventDeleteArgs>
-  ): Promise<Event> {
+  async deleteEvent(args: Prisma.EventDeleteArgs): Promise<PrismaEvent> {
     return this.prisma.event.delete(args);
   }
 
-  async getCustomer(parentId: string): Promise<Customer | null> {
+  async getCustomer(parentId: string): Promise<PrismaCustomer | null> {
     return this.prisma.event
       .findUnique({
         where: { id: parentId },

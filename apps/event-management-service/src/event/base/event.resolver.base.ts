@@ -10,7 +10,7 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import * as graphql from "@nestjs/graphql";
-import * as apollo from "apollo-server-express";
+import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
 import * as nestAccessControl from "nest-access-control";
@@ -19,13 +19,13 @@ import { GqlDefaultAuthGuard } from "../../auth/gqlDefaultAuth.guard";
 import * as common from "@nestjs/common";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
-import { CreateEventArgs } from "./CreateEventArgs";
-import { UpdateEventArgs } from "./UpdateEventArgs";
-import { DeleteEventArgs } from "./DeleteEventArgs";
+import { Event } from "./Event";
 import { EventCountArgs } from "./EventCountArgs";
 import { EventFindManyArgs } from "./EventFindManyArgs";
 import { EventFindUniqueArgs } from "./EventFindUniqueArgs";
-import { Event } from "./Event";
+import { CreateEventArgs } from "./CreateEventArgs";
+import { UpdateEventArgs } from "./UpdateEventArgs";
+import { DeleteEventArgs } from "./DeleteEventArgs";
 import { Customer } from "../../customer/base/Customer";
 import { EventService } from "../event.service";
 @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
@@ -59,7 +59,7 @@ export class EventResolverBase {
     possession: "any",
   })
   async events(@graphql.Args() args: EventFindManyArgs): Promise<Event[]> {
-    return this.service.findMany(args);
+    return this.service.events(args);
   }
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
@@ -72,7 +72,7 @@ export class EventResolverBase {
   async event(
     @graphql.Args() args: EventFindUniqueArgs
   ): Promise<Event | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.event(args);
     if (result === null) {
       return null;
     }
@@ -87,7 +87,7 @@ export class EventResolverBase {
     possession: "any",
   })
   async createEvent(@graphql.Args() args: CreateEventArgs): Promise<Event> {
-    return await this.service.create({
+    return await this.service.createEvent({
       ...args,
       data: {
         ...args.data,
@@ -112,7 +112,7 @@ export class EventResolverBase {
     @graphql.Args() args: UpdateEventArgs
   ): Promise<Event | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateEvent({
         ...args,
         data: {
           ...args.data,
@@ -126,7 +126,7 @@ export class EventResolverBase {
       });
     } catch (error) {
       if (isRecordNotFoundError(error)) {
-        throw new apollo.ApolloError(
+        throw new GraphQLError(
           `No resource was found for ${JSON.stringify(args.where)}`
         );
       }
@@ -144,10 +144,10 @@ export class EventResolverBase {
     @graphql.Args() args: DeleteEventArgs
   ): Promise<Event | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteEvent(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
-        throw new apollo.ApolloError(
+        throw new GraphQLError(
           `No resource was found for ${JSON.stringify(args.where)}`
         );
       }
@@ -165,9 +165,7 @@ export class EventResolverBase {
     action: "read",
     possession: "any",
   })
-  async resolveFieldCustomer(
-    @graphql.Parent() parent: Event
-  ): Promise<Customer | null> {
+  async getCustomer(@graphql.Parent() parent: Event): Promise<Customer | null> {
     const result = await this.service.getCustomer(parent.id);
 
     if (!result) {
