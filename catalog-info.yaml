@@ -1,0 +1,19 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: Amplication-service-with-backstage-info
+  description: 
+  labels:
+    vendor: "amplication"
+  annotations:
+    github.com/team-slug: "backstage/maintainers"
+    github.com/project-slug: "backstage/backstage"
+  tags:
+    - "Node.js"
+  links:
+    - url: https://server.amplication.com/cm6qg7umz00ttgrwmi6exjxpv
+      title: Amplication Platform
+spec:
+  type: service
+  lifecycle: production
+  owner: development
